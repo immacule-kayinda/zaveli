@@ -47,12 +47,6 @@ body {
   color: #2c2826;
 }
 
-#catalogue,
-#maison,
-article[id^="produit-"] {
-  scroll-margin-top: calc(var(--banner-h) + var(--header-h) + 1rem);
-}
-
 .skip-link {
   position: absolute;
   top: 0.75rem;

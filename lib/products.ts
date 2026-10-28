@@ -16,6 +16,12 @@ export const filters = [
 
 export type FilterId = (typeof filters)[number]["id"];
 
+const categoryIds = ["habits", "accessoires", "chaussures"] as const satisfies readonly CategoryId[];
+
+export function isCategoryId(value: string): value is CategoryId {
+  return (categoryIds as readonly string[]).includes(value);
+}
+
 const letterSizes = ["S", "M", "L", "XL"];
 const shoeSizes = ["37", "38", "39", "40", "41"];
 

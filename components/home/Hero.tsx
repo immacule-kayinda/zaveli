@@ -1,15 +1,12 @@
-"use client";
-
 import Image from "next/image";
+import Link from "next/link";
 
-import { useBoutique } from "@/components/cart/BoutiqueProvider";
 import { Button } from "@/components/ui/Button";
 import { formatPrice } from "@/lib/money";
 import { getProduct } from "@/lib/products";
-import { scrollToId } from "@/lib/scroll";
+import { routes } from "@/lib/routes";
 
 export function Hero() {
-  const { setFilter } = useBoutique();
   const featured = getProduct("robe-ivoire");
 
   return (
@@ -26,17 +23,10 @@ export function Hero() {
             la taille et la couleur. La commande part sur WhatsApp, et l&apos;on vous répond directement.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#catalogue" size="lg">
+            <Button href={routes.collection} size="lg">
               Voir la collection
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => {
-                setFilter("nouveautes");
-                scrollToId("catalogue");
-              }}
-            >
+            <Button href={routes.nouveautes} variant="outline" size="lg">
               Les nouveautés
             </Button>
           </div>
@@ -68,26 +58,22 @@ export function Hero() {
             />
           </div>
           {featured ? (
-            <a
-              href={`#produit-${featured.id}`}
-              className="absolute -bottom-2 left-3 flex w-[min(100%,18rem)] items-center gap-3 rounded-[1.35rem] border border-line bg-paper/95 p-3 shadow-[0_18px_50px_-30px_rgba(74,51,44,0.8)] backdrop-blur sm:right-0 sm:left-auto"
+            <Link
+              href={routes.product(featured.id)}
+              className="absolute -bottom-2 left-3 flex w-[min(100%,18rem)] items-center gap-3 rounded-[1.35rem] border border-line bg-paper/95 p-3 shadow-[0_18px_50px_-30px_rgba(74,51,44,0.8)] backdrop-blur transition hover:border-clay sm:right-0 sm:left-auto"
             >
               <span className="relative size-16 shrink-0 overflow-hidden rounded-2xl bg-sand">
-                <Image src={featured.image} alt="" fill sizes="64px" className={cnFocal(featured.focal)} />
+                <Image src={featured.image} alt="" fill sizes="64px" className={`object-cover ${featured.focal}`} />
               </span>
               <span>
                 <span className="block text-[0.68rem] tracking-[0.16em] text-clay uppercase">Nouveau</span>
                 <span className="font-display mt-0.5 block text-lg leading-tight text-ink">{featured.name}</span>
                 <span className="mt-0.5 block text-sm text-muted">{formatPrice(featured.price)}</span>
               </span>
-            </a>
+            </Link>
           ) : null}
         </div>
       </div>
     </section>
   );
-}
-
-function cnFocal(focal: string) {
-  return `object-cover ${focal}`;
 }

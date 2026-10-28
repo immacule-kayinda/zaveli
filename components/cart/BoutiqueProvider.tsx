@@ -5,7 +5,7 @@ import { createContext, useCallback, useContext, useMemo, useState, useSyncExter
 import { dispatchCart, getCartServerSnapshot, getCartSnapshot, subscribeCart } from "@/lib/cart-storage";
 import type { CartLine } from "@/lib/cart";
 import { cartTotal } from "@/lib/order";
-import { getProduct, type FilterId } from "@/lib/products";
+import { getProduct } from "@/lib/products";
 
 type BoutiqueContextValue = {
   lines: CartLine[];
@@ -21,8 +21,6 @@ type BoutiqueContextValue = {
   removeItem: (lineId: string) => void;
   updateVariant: (lineId: string, size: string, color: string) => void;
   setDetails: (details: { buyerName?: string; city?: string }) => void;
-  filter: FilterId;
-  setFilter: (filter: FilterId) => void;
   notice: string;
 };
 
@@ -31,7 +29,6 @@ const BoutiqueContext = createContext<BoutiqueContextValue | null>(null);
 export function BoutiqueProvider({ children }: { children: ReactNode }) {
   const state = useSyncExternalStore(subscribeCart, getCartSnapshot, getCartServerSnapshot);
   const [isCartOpen, setCartOpen] = useState(false);
-  const [filter, setFilter] = useState<FilterId>("tout");
   const [notice, setNotice] = useState("");
   const openCart = useCallback(() => setCartOpen(true), []);
   const closeCart = useCallback(() => setCartOpen(false), []);
@@ -58,11 +55,9 @@ export function BoutiqueProvider({ children }: { children: ReactNode }) {
       removeItem: (lineId) => dispatchCart({ type: "remove", lineId }),
       updateVariant: (lineId, size, color) => dispatchCart({ type: "updateVariant", lineId, size, color }),
       setDetails: (details) => dispatchCart({ type: "setDetails", ...details }),
-      filter,
-      setFilter,
       notice,
     };
-  }, [state, isCartOpen, filter, notice, openCart, closeCart]);
+  }, [state, isCartOpen, notice, openCart, closeCart]);
 
   return (
     <BoutiqueContext.Provider value={value}>

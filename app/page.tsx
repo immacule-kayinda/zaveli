@@ -1,5 +1,6 @@
-import { Catalog } from "@/components/home/Catalog";
+import { CategoryEntries } from "@/components/home/CategoryEntries";
 import { Hero } from "@/components/home/Hero";
+import { NouveautesPreview } from "@/components/home/NouveautesPreview";
 import { Reassurance } from "@/components/home/Reassurance";
 
 export default function HomePage() {
@@ -7,7 +8,8 @@ export default function HomePage() {
     <>
       <Hero />
       <Reassurance />
-      <Catalog />
+      <CategoryEntries />
+      <NouveautesPreview />
     </>
   );
 }
