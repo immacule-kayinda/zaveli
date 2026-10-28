@@ -31,6 +31,17 @@ export function CartDrawer() {
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLElement>(null);
+  const openSelects = useRef(0);
+
+  function trackSelect(open: boolean) {
+    if (open) {
+      openSelects.current += 1;
+      return;
+    }
+    queueMicrotask(() => {
+      openSelects.current = Math.max(0, openSelects.current - 1);
+    });
+  }
 
   useEffect(() => {
     if (!isCartOpen) return;
@@ -41,6 +52,7 @@ export function CartDrawer() {
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        if (openSelects.current > 0) return;
         closeCart();
         return;
       }
@@ -61,10 +73,10 @@ export function CartDrawer() {
       }
     }
 
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keydown", onKeyDown, true);
     return () => {
       document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKeyDown, true);
       previouslyFocused?.focus();
     };
   }, [isCartOpen, closeCart]);
@@ -159,6 +171,7 @@ export function CartDrawer() {
                             label={product.sizeKind === "shoe" ? "Pointure" : "Taille"}
                             density="compact"
                             value={line.size}
+                            onOpenChange={trackSelect}
                             onValueChange={(size) => updateVariant(line.lineId, size, line.color)}
                             options={product.sizes.map((size) => ({ value: size, label: size }))}
                           />
@@ -168,8 +181,13 @@ export function CartDrawer() {
                           label="Couleur"
                           density="compact"
                           value={line.color}
+                          onOpenChange={trackSelect}
                           onValueChange={(color) => updateVariant(line.lineId, line.size, color)}
-                          options={product.colors.map((swatch) => ({ value: swatch.name, label: swatch.name }))}
+                          options={product.colors.map((swatch) => ({
+                            value: swatch.name,
+                            label: swatch.name,
+                            swatch: swatch.hex,
+                          }))}
                         />
                       </div>
 
