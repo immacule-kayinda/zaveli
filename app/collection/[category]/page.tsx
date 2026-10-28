@@ -20,6 +20,8 @@ export function generateStaticParams() {
   return (["habits", "accessoires", "chaussures"] as const).map((category) => ({ category }));
 }
 
+export const instant = false;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category } = await params;
   if (!isCategoryId(category)) return { title: "Introuvable" };

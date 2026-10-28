@@ -12,6 +12,8 @@ export function generateStaticParams() {
   return products.map((product) => ({ id: product.id }));
 }
 
+export const instant = false;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const product = getProduct(id);

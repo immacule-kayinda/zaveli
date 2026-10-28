@@ -14,14 +14,15 @@ function readFromStorage(): CartState {
 
 export function subscribeCart(listener: () => void) {
   listeners.add(listener);
+  if (!loaded && typeof window !== "undefined") {
+    loaded = true;
+    const stored = readFromStorage();
+    if (stored !== snapshot) snapshot = stored;
+  }
   return () => listeners.delete(listener);
 }
 
 export function getCartSnapshot(): CartState {
-  if (!loaded) {
-    loaded = true;
-    snapshot = readFromStorage();
-  }
   return snapshot;
 }
 
