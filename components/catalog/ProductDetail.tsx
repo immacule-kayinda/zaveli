@@ -13,15 +13,17 @@ export function ProductDetail({ product }: { product: Product }) {
 
   return (
     <article className="mx-auto grid max-w-6xl gap-10 px-5 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:py-16">
-      <div className="relative aspect-[3/4] overflow-hidden rounded-[1.8rem] bg-sand lg:sticky lg:top-[calc(var(--banner-h)+var(--header-h)+1.5rem)]">
-        <Image
-          src={product.image}
-          alt={product.imageAlt}
-          fill
-          priority
-          sizes="(min-width: 1024px) 42vw, 100vw"
-          className={cn("object-cover", product.focal)}
-        />
+      <div className="lg:sticky lg:top-[calc(var(--banner-h)+var(--header-h)+1.5rem)]">
+        <div className="relative aspect-[3/4] overflow-hidden rounded-[1.8rem] bg-sand">
+          <Image
+            src={product.image}
+            alt={product.imageAlt}
+            fill
+            priority
+            sizes="(min-width: 1024px) 42vw, 100vw"
+            className={cn("object-cover", product.focal)}
+          />
+        </div>
       </div>
 
       <div>

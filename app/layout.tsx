@@ -39,7 +39,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${display.variable} ${sans.variable} h-full antialiased`}>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${display.variable} ${sans.variable} h-full antialiased`}>
       <body className="min-h-full bg-ivory font-sans text-ink">
         <a href="#contenu" className="skip-link">
           Aller au contenu
