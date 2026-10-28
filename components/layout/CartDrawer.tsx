@@ -133,7 +133,7 @@ export function CartDrawer() {
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
               Choisissez une taille et une couleur, puis ajoutez la pièce. Vous pourrez tout envoyer en un message.
             </p>
-            <Button className="mt-6 self-start" onClick={closeCart} href="#catalogue">
+            <Button className="mt-6 self-start" onClick={closeCart} href="/collection">
               Voir la collection
             </Button>
           </div>

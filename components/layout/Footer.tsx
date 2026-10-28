@@ -1,17 +1,22 @@
-"use client";
+import Link from "next/link";
 
-import { useBoutique } from "@/components/cart/BoutiqueProvider";
 import { Button } from "@/components/ui/Button";
-import { filters } from "@/lib/products";
-import { scrollToId } from "@/lib/scroll";
+import { categoryLabels } from "@/lib/products";
+import { routes } from "@/lib/routes";
+import type { CategoryId } from "@/lib/types";
 import { buildGreetingMessage, whatsAppUrl } from "@/lib/whatsapp";
 
-export function Footer() {
-  const { setFilter } = useBoutique();
-  const links = filters.filter((filter) => filter.id !== "tout");
+const rayons: CategoryId[] = ["habits", "accessoires", "chaussures"];
 
+const pages = [
+  { href: routes.collection, label: "Toute la collection" },
+  { href: routes.nouveautes, label: "Nouveautés" },
+  { href: routes.maison, label: "La maison" },
+];
+
+export function Footer() {
   return (
-    <footer id="maison" className="bg-cocoa text-paper">
+    <footer className="bg-cocoa text-paper">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-16 md:grid-cols-[1.3fr_0.8fr_1fr]">
         <div>
           <p className="font-display text-4xl">Zaveli</p>
@@ -22,20 +27,20 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-xs tracking-[0.18em] text-paper/55 uppercase">Collection</p>
+          <p className="text-xs tracking-[0.18em] text-paper/55 uppercase">Parcourir</p>
           <ul className="mt-4 grid gap-2">
-            {links.map((filter) => (
-              <li key={filter.id}>
-                <button
-                  type="button"
-                  className="text-sm text-paper/85 transition hover:text-blush"
-                  onClick={() => {
-                    setFilter(filter.id);
-                    scrollToId("catalogue");
-                  }}
-                >
-                  {filter.label}
-                </button>
+            {pages.map((page) => (
+              <li key={page.href}>
+                <Link href={page.href} className="text-sm text-paper/85 transition hover:text-blush">
+                  {page.label}
+                </Link>
+              </li>
+            ))}
+            {rayons.map((category) => (
+              <li key={category}>
+                <Link href={routes.category(category)} className="text-sm text-paper/85 transition hover:text-blush">
+                  {categoryLabels[category]}
+                </Link>
               </li>
             ))}
           </ul>
