@@ -47,12 +47,6 @@ body {
   color: #2c2826;
 }
 
-#catalogue,
-#maison,
-article[id^="produit-"] {
-  scroll-margin-top: calc(var(--banner-h) + var(--header-h) + 1rem);
-}
-
 .skip-link {
   position: absolute;
   top: 0.75rem;
@@ -70,8 +64,25 @@ article[id^="produit-"] {
   transform: none;
 }
 
+@keyframes zaveli-select-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.select-panel[data-state="open"] {
+  animation: zaveli-select-in 140ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .select-panel[data-state="open"] {
+    animation: none;
   }
 }

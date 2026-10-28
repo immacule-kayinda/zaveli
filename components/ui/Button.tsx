@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from "react";
+import Link from "next/link";
 
 import { cn } from "@/lib/cn";
 
@@ -49,10 +50,18 @@ export function Button(props: ButtonProps | LinkProps) {
   const className = cn(base, variants[variant], sizes[size], props.className);
 
   if (isLink(props)) {
+    const linkProps = withoutPresentation(props);
+    if (isExternal(props.href)) {
+      return (
+        <a className={className} {...linkProps}>
+          {props.children}
+        </a>
+      );
+    }
     return (
-      <a className={className} {...withoutPresentation(props)}>
+      <Link className={className} {...linkProps}>
         {props.children}
-      </a>
+      </Link>
     );
   }
 
@@ -62,6 +71,10 @@ export function Button(props: ButtonProps | LinkProps) {
       {props.children}
     </button>
   );
+}
+
+function isExternal(href: string) {
+  return /^(https?:|mailto:|tel:)/.test(href);
 }
 
 function withoutPresentation<T extends Common>(props: T): Omit<T, keyof Common> {

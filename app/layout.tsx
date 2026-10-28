@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { Fraunces, Outfit } from "next/font/google";
 
 import { BoutiqueProvider } from "@/components/cart/BoutiqueProvider";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
+import { Header, HeaderFallback } from "@/components/layout/Header";
 
 import "./globals.css";
 
@@ -24,7 +25,10 @@ const sans = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Zaveli — Vêtements et accessoires",
+  title: {
+    default: "Zaveli — Vêtements et accessoires",
+    template: "%s — Zaveli",
+  },
   description:
     "Maison de vêtements et d'accessoires pour femmes, à Kinshasa. Choisissez la taille et la couleur, puis commandez directement sur WhatsApp.",
 };
@@ -35,14 +39,16 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="fr" className={`${display.variable} ${sans.variable} h-full antialiased`}>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${display.variable} ${sans.variable} h-full antialiased`}>
       <body className="min-h-full bg-ivory font-sans text-ink">
         <a href="#contenu" className="skip-link">
           Aller au contenu
         </a>
         <AnnouncementBar />
         <BoutiqueProvider>
-          <Header />
+          <Suspense fallback={<HeaderFallback />}>
+            <Header />
+          </Suspense>
           <main id="contenu" className="pt-[calc(var(--banner-h)+var(--header-h))]">
             {children}
           </main>
