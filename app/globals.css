@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  --banner-h: 2.25rem;
+  --header-h: 4.5rem;
+  --ivory: #f6f0e8;
+  --paper: #fffbf7;
+  --sand: #f0e4d8;
+  --blush: #f3d9d0;
+  --clay: #a24e34;
+  --clay-deep: #8a3f29;
+  --cocoa: #4a332c;
+  --ink: #2c2826;
+  --muted: #6e6158;
+  --line: #e4d5c8;
+}
+
+@theme inline {
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-blush: var(--blush);
+  --color-clay: var(--clay);
+  --color-clay-deep: var(--clay-deep);
+  --color-cocoa: var(--cocoa);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-outfit);
+  --font-display: var(--font-fraunces);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--ivory);
+  background-image:
+    radial-gradient(920px 420px at 0% -8%, rgba(243, 217, 208, 0.85), transparent 58%),
+    radial-gradient(720px 380px at 100% 0%, rgba(162, 78, 52, 0.08), transparent 52%);
+  color: var(--ink);
+}
+
+::selection {
+  background: #f3d9d0;
+  color: #2c2826;
+}
+
+#catalogue,
+#maison,
+article[id^="produit-"] {
+  scroll-margin-top: calc(var(--banner-h) + var(--header-h) + 1rem);
+}
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 1rem;
+  z-index: 60;
+  transform: translateY(-150%);
+  border-radius: 999px;
+  background: var(--paper);
+  padding: 0.55rem 1rem;
+  color: var(--ink);
+  box-shadow: 0 0 0 2px var(--clay);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
