@@ -1,4 +1,5 @@
-import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { refresh, revalidatePath } from "next/cache";
+import { connection } from "next/server";
 
 import { readStoredCatalogJson, removeStoredImage, saveStoredImage, writeStoredCatalog } from "@/lib/catalog-io";
 import { focalChoices, products as seedProducts, sizesForKind, type FocalChoice } from "@/lib/products";
@@ -22,9 +23,7 @@ export async function readCatalogFresh(): Promise<Product[]> {
 }
 
 export async function getCatalog(): Promise<Product[]> {
-  "use cache";
-  cacheTag("catalog");
-  cacheLife("hours");
+  await connection();
   try {
     return await readCatalogFresh();
   } catch {
@@ -34,7 +33,23 @@ export async function getCatalog(): Promise<Product[]> {
 
 export async function saveCatalog(catalog: Product[]): Promise<void> {
   await writeStoredCatalog(catalog);
-  updateTag("catalog");
+  await waitUntilStored(catalog);
+  revalidatePath("/", "layout");
+  refresh();
+}
+
+async function waitUntilStored(catalog: Product[]): Promise<void> {
+  const expected = catalog.map((product) => `${product.id}:${product.price}`).join("|");
+  for (let attempt = 0; attempt < 6; attempt += 1) {
+    try {
+      const stored = await readCatalogFresh();
+      const actual = stored.map((product) => `${product.id}:${product.price}`).join("|");
+      if (actual === expected) return;
+    } catch {
+      // Le fichier vient d'être écrit : une lecture trop tôt peut encore renvoyer l'ancienne version.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
 }
 
 export function slugify(value: string): string {
@@ -159,12 +174,16 @@ export function parseCatalog(value: unknown): Product[] | null {
   return catalog;
 }
 
+export function imageFilename(id: string, extension: string, now = Date.now()): string {
+  return `${slugify(id) || "piece"}-${now}.${extension}`;
+}
+
 export async function storePieceImage(file: File, id: string): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
   if (file.size === 0) return { ok: false, error: "Ajoutez une photo." };
   if (file.size > 5_000_000) return { ok: false, error: "La photo dépasse 5 Mo." };
   const extension = extensionFor(file.type);
   if (!extension) return { ok: false, error: "La photo doit être un JPEG, un PNG ou un WebP." };
-  const url = await saveStoredImage(Buffer.from(await file.arrayBuffer()), `${id}-${Date.now()}.${extension}`, file.type);
+  const url = await saveStoredImage(Buffer.from(await file.arrayBuffer()), imageFilename(id, extension), file.type);
   return { ok: true, url };
 }
 

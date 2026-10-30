@@ -8,6 +8,8 @@ import { Footer } from "@/components/layout/Footer";
 import { Header, HeaderFallback } from "@/components/layout/Header";
 import { getCatalog } from "@/lib/catalog";
 
+export const instant = false;
+
 export default async function BoutiqueLayout({ children }: { children: ReactNode }) {
   const catalog = await getCatalog();
 

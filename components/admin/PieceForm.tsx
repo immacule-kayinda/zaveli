@@ -32,7 +32,8 @@ export function PieceForm({
 }) {
   const [state, formAction] = useActionState(action, initial);
   const [colors, setColors] = useState(product?.colors ?? [{ name: "", hex: "#F3EBDD" }]);
-  const sizeHint = sizeKinds.find((kind) => kind.value === (product?.sizeKind ?? "letter"))?.hint;
+  const [sizeKind, setSizeKind] = useState<SizeKind>(product?.sizeKind ?? "letter");
+  const sizeHint = sizeKinds.find((kind) => kind.value === sizeKind)?.hint;
 
   return (
     <form action={formAction} className="grid gap-5">
@@ -68,7 +69,13 @@ export function PieceForm({
         </Field>
       </div>
       <Field label="Tailles" id="sizeKind" hint={sizeHint}>
-        <select id="sizeKind" name="sizeKind" defaultValue={product?.sizeKind ?? "letter"} className={fieldClass}>
+        <select
+          id="sizeKind"
+          name="sizeKind"
+          value={sizeKind}
+          onChange={(event) => setSizeKind(event.target.value as SizeKind)}
+          className={fieldClass}
+        >
           {sizeKinds.map((kind) => (
             <option key={kind.value} value={kind.value}>
               {kind.label}

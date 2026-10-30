@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { parseCatalog, slugify, toProduct, type PieceDraft } from "./catalog";
+import { imageFilename, parseCatalog, slugify, toProduct, type PieceDraft } from "./catalog";
 import { products } from "./products";
 
 const draft: PieceDraft = {
@@ -25,6 +25,10 @@ describe("slugify", () => {
   it("retire les accents et la ponctuation", () => {
     assert.equal(slugify("Écharpe d'été"), "echarpe-d-ete");
     assert.equal(slugify("   "), "");
+  });
+
+  it("donne un nom de fichier sans espace", () => {
+    assert.equal(imageFilename("Foulard Brique", "jpg", 5), "foulard-brique-5.jpg");
   });
 });
 

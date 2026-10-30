@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { clearAdminSession, readAdminSession, writeAdminSession } from "@/lib/admin-cookie";
 import { adminConfig, credentialsMatch } from "@/lib/admin-session";
-import { discardImage, readCatalogFresh, saveCatalog, storePieceImage, toProduct, type PieceDraft } from "@/lib/catalog";
+import { discardImage, readCatalogFresh, saveCatalog, slugify, storePieceImage, toProduct, type PieceDraft } from "@/lib/catalog";
 import type { Product } from "@/lib/types";
 
 export type FormState = { error: string };
@@ -90,7 +90,7 @@ async function catalogForWrite(): Promise<Product[] | null> {
 
 function slugSource(formData: FormData): string {
   const id = String(formData.get("id") ?? "").trim();
-  return id || String(formData.get("name") ?? "piece");
+  return slugify(id || String(formData.get("name") ?? "piece")) || "piece";
 }
 
 function draftFromForm(formData: FormData, image: string): PieceDraft {

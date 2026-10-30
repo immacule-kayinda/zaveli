@@ -1,4 +1,4 @@
-import { BlobNotFoundError, del, head, put } from "@vercel/blob";
+import { BlobNotFoundError, del, get, put } from "@vercel/blob";
 import { mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -29,6 +29,7 @@ export async function writeStoredCatalog(catalog: Product[]): Promise<void> {
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",
+      cacheControlMaxAge: 60,
     });
     return;
   }
@@ -64,11 +65,9 @@ export async function removeStoredImage(url: string): Promise<void> {
 
 async function readBlob(): Promise<string | null> {
   try {
-    const existing = await head(CATALOG_PATH);
-    const response = await fetch(existing.url, { cache: "no-store" });
-    if (response.status === 404) return null;
-    if (!response.ok) throw new Error(`Lecture du catalogue impossible (${response.status}).`);
-    return await response.text();
+    const result = await get(CATALOG_PATH, { access: "public", useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) return null;
+    return await new Response(result.stream).text();
   } catch (error) {
     if (error instanceof BlobNotFoundError) return null;
     throw error;
