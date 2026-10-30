@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { categoryLabels, getProduct, products } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
+import { categoryLabels } from "@/lib/products";
 import { routes } from "@/lib/routes";
 import type { CategoryId } from "@/lib/types";
 
@@ -11,10 +12,13 @@ const covers: Record<CategoryId, string> = {
   chaussures: "escarpins-nacre",
 };
 
-export function CategoryEntries() {
+export async function CategoryEntries() {
+  const catalog = await getCatalog();
   const entries = (Object.keys(covers) as CategoryId[]).map((category) => {
-    const cover = getProduct(covers[category]);
-    const count = products.filter((product) => product.category === category).length;
+    const cover =
+      catalog.find((product) => product.id === covers[category]) ??
+      catalog.find((product) => product.category === category);
+    const count = catalog.filter((product) => product.category === category).length;
     return { category, cover, count };
   });
 
@@ -28,7 +32,7 @@ export function CategoryEntries() {
       </div>
       <div className="mt-8 grid gap-5 md:grid-cols-3">
         {entries.map(({ category, cover, count }) => {
-          if (!cover) return null;
+          if (!cover || count === 0) return null;
           const pieceLabel = count > 1 ? `${count} pièces` : `${count} pièce`;
           return (
             <Link

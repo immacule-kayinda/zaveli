@@ -3,12 +3,14 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import { getCatalog } from "@/lib/catalog";
 import { formatPrice } from "@/lib/money";
-import { filterProducts } from "@/lib/products";
+import { selectProducts } from "@/lib/products";
 import { routes } from "@/lib/routes";
 
-export function NouveautesPreview() {
-  const pieces = filterProducts("nouveautes").slice(0, 4);
+export async function NouveautesPreview() {
+  const pieces = selectProducts(await getCatalog(), "nouveautes").slice(0, 4);
+  if (pieces.length === 0) return null;
 
   return (
     <section className="mx-auto max-w-6xl px-5 pb-20" aria-labelledby="nouveautes-title">

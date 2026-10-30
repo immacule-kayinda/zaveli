@@ -1,4 +1,4 @@
-import type { CategoryId, Product } from "@/lib/types";
+import type { CategoryId, Product, SizeKind } from "@/lib/types";
 
 export const categoryLabels: Record<CategoryId, string> = {
   habits: "Habits",
@@ -225,12 +225,31 @@ export const products: Product[] = [
   },
 ];
 
+export const focalChoices = [
+  { value: "object-center", label: "Centre" },
+  { value: "object-top", label: "Haut" },
+  { value: "object-[center_18%]", label: "Un peu plus haut" },
+  { value: "object-[center_22%]", label: "Entre le haut et le centre" },
+] as const;
+
+export type FocalChoice = (typeof focalChoices)[number]["value"];
+
+export function sizesForKind(kind: SizeKind): string[] {
+  if (kind === "shoe") return [...shoeSizes];
+  if (kind === "unique") return ["unique"];
+  return [...letterSizes];
+}
+
 export function getProduct(id: string): Product | undefined {
   return products.find((product) => product.id === id);
 }
 
+export function selectProducts(catalog: Product[], filter: FilterId): Product[] {
+  if (filter === "tout") return catalog;
+  if (filter === "nouveautes") return catalog.filter((product) => product.isNew);
+  return catalog.filter((product) => product.category === filter);
+}
+
 export function filterProducts(filter: FilterId): Product[] {
-  if (filter === "tout") return products;
-  if (filter === "nouveautes") return products.filter((product) => product.isNew);
-  return products.filter((product) => product.category === filter);
+  return selectProducts(products, filter);
 }

@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/Button";
+import { getCatalog } from "@/lib/catalog";
 import { formatPrice } from "@/lib/money";
-import { getProduct } from "@/lib/products";
 import { routes } from "@/lib/routes";
 
-export function Hero() {
-  const featured = getProduct("robe-ivoire");
+export async function Hero() {
+  const catalog = await getCatalog();
+  const featured = catalog.find((product) => product.id === "robe-ivoire") ?? catalog.find((product) => product.isNew) ?? catalog[0];
 
   return (
     <section className="relative">
