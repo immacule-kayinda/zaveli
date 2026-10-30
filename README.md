@@ -21,7 +21,7 @@ Un seul compte, défini par des variables d'environnement (jamais préfixées pa
 
 Les trois doivent être présentes, en local dans `.env.local` et sur Vercel pour la production, les aperçus et le développement. La page de connexion est `/admin/connexion`. Sans fichier de catalogue, la boutique affiche le jeu de départ jusqu'au premier enregistrement.
 
-Les photos et le fichier `catalog/products.json` vont dans Vercel Blob quand `BLOB_READ_WRITE_TOKEN` est défini. En local, sans ce jeton, ils restent dans `.data/` et `public/uploads/`. Chaque visite relit ce fichier : un enregistrement apparaît dans la boutique sans redéployer les pages.
+Les photos vont dans Vercel Blob quand `BLOB_READ_WRITE_TOKEN` est défini. Le catalogue y est réécrit sous un nouveau nom à chaque enregistrement, pour que la boutique lise la dernière version et non une copie mise en cache. En local, sans ce jeton, photos et catalogue restent dans `.data/` et `public/uploads/`. Un enregistrement apparaît dans la boutique sans redéployer les pages.
 
 ## Numéro WhatsApp
 
