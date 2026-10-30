@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ProductDetail } from "@/components/catalog/ProductDetail";
-import { getProduct, products } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
+import { products } from "@/lib/products";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -16,7 +17,7 @@ export const instant = false;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const product = getProduct(id);
+  const product = (await getCatalog()).find((item) => item.id === id);
   if (!product) return { title: "Introuvable" };
   return {
     title: product.name,
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const product = getProduct(id);
+  const product = (await getCatalog()).find((item) => item.id === id);
   if (!product) notFound();
   return <ProductDetail product={product} />;
 }

@@ -31,6 +31,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# catalogue local et photos ajoutées depuis l'administration
+.data/
+public/uploads/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,5 +1,4 @@
 import type { CartLine } from "@/lib/cart";
-import { getProduct } from "@/lib/products";
 import type { OrderLine, Product } from "@/lib/types";
 
 export function toOrderLine(product: Product, size: string, color: string, quantity: number): OrderLine {
@@ -13,16 +12,16 @@ export function toOrderLine(product: Product, size: string, color: string, quant
   };
 }
 
-export function linesFromCart(lines: CartLine[]): OrderLine[] {
+export function linesFromCart(lines: CartLine[], catalog: Product[]): OrderLine[] {
   const order: OrderLine[] = [];
   for (const line of lines) {
-    const product = getProduct(line.productId);
+    const product = catalog.find((item) => item.id === line.productId);
     if (!product) continue;
     order.push(toOrderLine(product, line.size, line.color, line.quantity));
   }
   return order;
 }
 
-export function cartTotal(lines: CartLine[]): number {
-  return linesFromCart(lines).reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
+export function cartTotal(lines: CartLine[], catalog: Product[]): number {
+  return linesFromCart(lines, catalog).reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
 }

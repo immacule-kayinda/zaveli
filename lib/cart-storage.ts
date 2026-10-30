@@ -1,15 +1,28 @@
 import { cartReducer, emptyCart, parseStoredCart, type CartAction, type CartState } from "@/lib/cart";
 import { products } from "@/lib/products";
+import type { Product } from "@/lib/types";
 
 const STORAGE_KEY = "zaveli-cart-v1";
 
 const listeners = new Set<() => void>();
 let snapshot: CartState = emptyCart;
 let loaded = false;
+let activeCatalog: Product[] = products;
+
+export function bindCartCatalog(catalog: Product[]) {
+  activeCatalog = catalog;
+}
 
 function readFromStorage(): CartState {
   const raw = window.localStorage.getItem(STORAGE_KEY);
-  return raw ? parseStoredCart(raw, products) : emptyCart;
+  return raw ? parseStoredCart(raw, activeCatalog) : emptyCart;
+}
+
+export function reloadCartWithCatalog(catalog: Product[]) {
+  activeCatalog = catalog;
+  if (!loaded || typeof window === "undefined") return;
+  snapshot = readFromStorage();
+  listeners.forEach((listener) => listener());
 }
 
 export function subscribeCart(listener: () => void) {

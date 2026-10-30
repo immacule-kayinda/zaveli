@@ -11,7 +11,6 @@ import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/cn";
 import { formatPrice } from "@/lib/money";
 import { linesFromCart } from "@/lib/order";
-import { getProduct } from "@/lib/products";
 import { buildOrderMessage, whatsAppUrl } from "@/lib/whatsapp";
 
 export function CartDrawer() {
@@ -27,6 +26,7 @@ export function CartDrawer() {
     removeItem,
     updateVariant,
     setDetails,
+    catalog,
   } = useBoutique();
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -81,7 +81,7 @@ export function CartDrawer() {
     };
   }, [isCartOpen, closeCart]);
 
-  const orderLines = linesFromCart(lines);
+  const orderLines = linesFromCart(lines, catalog);
   const checkoutHref =
     orderLines.length > 0 ? whatsAppUrl(buildOrderMessage(orderLines, { buyerName, city })) : undefined;
   const countLabel = count > 1 ? `${count} articles` : count === 1 ? "1 article" : "Aucun article";
@@ -141,7 +141,7 @@ export function CartDrawer() {
           <>
             <ul className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
               {lines.map((line) => {
-                const product = getProduct(line.productId);
+                const product = catalog.find((item) => item.id === line.productId);
                 if (!product) return null;
                 const lineTotal = product.price * line.quantity;
                 return (

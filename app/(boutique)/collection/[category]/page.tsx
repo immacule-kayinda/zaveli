@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { Listing } from "@/components/catalog/Listing";
-import { categoryLabels, filterProducts, isCategoryId } from "@/lib/products";
+import { getCatalog } from "@/lib/catalog";
+import { categoryLabels, isCategoryId, selectProducts } from "@/lib/products";
 import type { CategoryId } from "@/lib/types";
 
 const intros: Record<CategoryId, string> = {
@@ -41,7 +42,7 @@ export default async function CategoryPage({ params }: PageProps) {
       eyebrow="La collection"
       title={categoryLabels[category]}
       intro={intros[category]}
-      products={filterProducts(category)}
+      products={selectProducts(await getCatalog(), category)}
       active={category}
     />
   );
