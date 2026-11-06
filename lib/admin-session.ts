@@ -21,10 +21,18 @@ export function adminConfig(): AdminConfig {
   };
 }
 
+/** Identifiant : sans espaces autour et sans tenir compte des majuscules (les claviers mobiles en ajoutent). */
+function normalizeUser(value: string): string {
+  return value.normalize("NFC").trim().toLocaleLowerCase("fr");
+}
+
 export function credentialsMatch(user: string, password: string): boolean {
   const config = adminConfig();
   if (!config.configured) return false;
-  return safeEqual(user, config.user) && safeEqual(password, config.password);
+  const userOk = safeEqual(normalizeUser(user), normalizeUser(config.user));
+  // Le mot de passe reste sensible à la casse. Seuls les espaces collés autour par la saisie semi-automatique sont tolérés.
+  const passwordOk = safeEqual(password, config.password) || safeEqual(password.trim(), config.password);
+  return userOk && passwordOk;
 }
 
 export function createSessionToken(user: string, secret: string, now = Date.now()): string {

@@ -8,15 +8,18 @@ import { discardImage, readCatalogFresh, saveCatalog, slugify, storePieceImage, 
 import type { Product } from "@/lib/types";
 
 export type FormState = { error: string };
+export type LoginState = { error: string; user: string };
 
-export async function login(_state: FormState, formData: FormData): Promise<FormState> {
+export async function login(_state: LoginState, formData: FormData): Promise<LoginState> {
+  const user = String(formData.get("user") ?? "").slice(0, 100);
   if (!adminConfig().configured) {
-    return { error: "Le compte admin n'est pas configuré." };
+    return { error: "Le compte admin n'est pas configuré.", user };
   }
-  const user = String(formData.get("user") ?? "");
-  const password = String(formData.get("password") ?? "");
+  const password = String(formData.get("password") ?? "").slice(0, 200);
   if (!credentialsMatch(user, password)) {
-    return { error: "Identifiants incorrects." };
+    // Une courte pause ralentit les essais en série, sans gêner une vraie faute de frappe.
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    return { error: "Identifiant ou mot de passe incorrect. Vérifiez la saisie, puis réessayez.", user };
   }
   await writeAdminSession(adminConfig().user);
   redirect("/admin");
