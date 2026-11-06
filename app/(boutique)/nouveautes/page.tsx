@@ -6,7 +6,7 @@ import { selectProducts } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Nouveautés",
-  description: "Les pièces qui viennent d'arriver chez Zaveli. Taille, couleur, puis commande sur WhatsApp.",
+  description: "Les pièces qui viennent d'arriver chez ZAVÉLYmarket. Taille, couleur, puis commande sur WhatsApp.",
 };
 
 export default async function NouveautesPage() {

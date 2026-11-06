@@ -151,6 +151,10 @@ export function PieceForm({
         <input type="checkbox" name="isNew" defaultChecked={product?.isNew ?? true} className="size-4 accent-clay" />
         Afficher dans les nouveautés
       </label>
+      <label className="flex items-center gap-3 text-sm text-cocoa">
+        <input type="checkbox" name="soldOut" defaultChecked={product?.soldOut ?? false} className="size-4 accent-clay" />
+        Épuisée : la pièce reste visible mais ne peut plus être commandée
+      </label>
       <Submit label={product ? "Enregistrer" : "Ajouter à la collection"} />
     </form>
   );

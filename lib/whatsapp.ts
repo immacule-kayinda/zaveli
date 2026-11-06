@@ -33,10 +33,14 @@ export function buildOrderMessage(lines: OrderLine[], details?: OrderDetails): s
   ];
 
   const notes: string[] = [];
+  const orderId = details?.orderId?.trim();
+  if (orderId) notes.push(`🧾 Commande n° ${orderId}`);
   const buyerName = details?.buyerName?.trim();
   const city = details?.city?.trim();
   if (buyerName) notes.push(`👤 Prénom : ${buyerName}`);
   if (city) notes.push(`📍 Livraison : ${city}`);
+  const phone = details?.phone?.trim();
+  if (phone) notes.push(`📞 Téléphone : ${phone}`);
   if (notes.length > 0) parts.push("", notes.join("\n"));
 
   parts.push("", "Merci de me confirmer la disponibilité et les modalités de livraison.");

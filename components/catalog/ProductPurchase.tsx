@@ -6,12 +6,10 @@ import { useState } from "react";
 import { useBoutique } from "@/components/cart/BoutiqueProvider";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
-import { toOrderLine } from "@/lib/order";
 import type { Product } from "@/lib/types";
-import { buildOrderMessage, whatsAppUrl } from "@/lib/whatsapp";
 
 export function ProductPurchase({ product }: { product: Product }) {
-  const { addItem, buyerName, city } = useBoutique();
+  const { addItem, checkout, checkingOut, checkoutError, settings } = useBoutique();
   const [size, setSize] = useState(product.sizes[0] ?? "");
   const [color, setColor] = useState(product.colors[0]?.name ?? "");
   const [error, setError] = useState("");
@@ -33,14 +31,18 @@ export function ProductPurchase({ product }: { product: Product }) {
     addItem({ productId: product.id, size, color });
   }
 
-  const orderHref = ready
-    ? whatsAppUrl(
-        buildOrderMessage([toOrderLine(product, size, color, 1)], {
-          buyerName,
-          city,
-        }),
-      )
-    : undefined;
+  function orderNow() {
+    if (!requireSelection()) return;
+    void checkout([{ productId: product.id, size, color, quantity: 1 }]);
+  }
+
+  if (product.soldOut) {
+    return (
+      <p className="mt-5 rounded-2xl bg-sand px-4 py-3 text-sm text-cocoa">
+        Cette pièce est épuisée pour le moment. Écrivez-nous pour être prévenue d&apos;un retour.
+      </p>
+    );
+  }
 
   return (
     <div>
@@ -106,27 +108,23 @@ export function ProductPurchase({ product }: { product: Product }) {
         </fieldset>
       )}
 
-      {error ? (
+      {error || checkoutError ? (
         <p role="alert" className="mt-3 text-sm text-clay">
-          {error}
+          {error || checkoutError}
         </p>
       ) : null}
 
       <div className="mt-5 grid gap-2">
-        <Button className="w-full" onClick={addToCart}>
+        <Button className="w-full" onClick={addToCart} disabled={!settings.ordersOpen}>
           Ajouter au panier
         </Button>
-        {orderHref ? (
-          <Button href={orderHref} target="_blank" rel="noopener noreferrer" variant="outline" className="w-full">
-            <MessageCircle aria-hidden className="size-4 shrink-0" />
-            Commander directement sur WhatsApp
-          </Button>
-        ) : (
-          <Button variant="outline" className="w-full" onClick={requireSelection}>
-            <MessageCircle aria-hidden className="size-4 shrink-0" />
-            Commander directement sur WhatsApp
-          </Button>
-        )}
+        <Button variant="outline" className="w-full" onClick={orderNow} disabled={checkingOut || !settings.ordersOpen}>
+          <MessageCircle aria-hidden className="size-4 shrink-0" />
+          {checkingOut ? "Enregistrement…" : "Commander directement sur WhatsApp"}
+        </Button>
+        {!settings.ordersOpen ? (
+          <p className="text-center text-xs text-muted">Les commandes sont fermées pour le moment.</p>
+        ) : null}
       </div>
     </div>
   );

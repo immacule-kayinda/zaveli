@@ -20,6 +20,8 @@ export type Product = {
   imageAlt: string;
   focal: string;
   isNew: boolean;
+  /** Visible dans la boutique, mais impossible à commander. */
+  soldOut?: boolean;
 };
 
 export type OrderLine = {
@@ -34,4 +36,7 @@ export type OrderLine = {
 export type OrderDetails = {
   buyerName?: string;
   city?: string;
+  phone?: string;
+  /** Numéro de suivi, quand la commande a été enregistrée par le site. */
+  orderId?: string;
 };

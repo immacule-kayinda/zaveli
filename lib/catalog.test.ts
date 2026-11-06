@@ -19,6 +19,7 @@ const draft: PieceDraft = {
   imageAlt: "Robe chemise ivoire, ceinture nouée.",
   focal: "object-center",
   isNew: true,
+  soldOut: false,
 };
 
 describe("slugify", () => {

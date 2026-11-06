@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { categoryLabels } from "@/lib/products";
 import { routes } from "@/lib/routes";
+import { shop } from "@/lib/shop";
 import type { CategoryId } from "@/lib/types";
 import { buildGreetingMessage, whatsAppUrl } from "@/lib/whatsapp";
 
@@ -14,12 +15,12 @@ const pages = [
   { href: routes.maison, label: "La maison" },
 ];
 
-export function Footer() {
+export function Footer({ whatsappNumber }: { whatsappNumber: string }) {
   return (
     <footer className="bg-cocoa text-paper">
       <div className="mx-auto grid max-w-6xl gap-12 px-5 py-16 md:grid-cols-[1.3fr_0.8fr_1fr]">
         <div>
-          <p className="font-display text-4xl">Zaveli</p>
+          <p className="font-display text-4xl">{shop.name}</p>
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-paper/75">
             Une petite maison de vêtements et d&apos;accessoires. Les pièces sont choisies une à une, et chaque
             commande se confirme par message.
@@ -52,7 +53,7 @@ export function Footer() {
             Une question de taille, de couleur ou de livraison : le message part déjà rédigé.
           </p>
           <Button
-            href={whatsAppUrl(buildGreetingMessage())}
+            href={whatsAppUrl(buildGreetingMessage(), whatsappNumber)}
             target="_blank"
             rel="noopener noreferrer"
             variant="secondary"
@@ -63,7 +64,7 @@ export function Footer() {
           <p className="mt-3 text-xs text-paper/50">Réponse en journée, du lundi au samedi.</p>
         </div>
       </div>
-      <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-paper/45">© 2026 Zaveli</div>
+      <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-paper/45">© 2026 {shop.name}</div>
     </footer>
   );
 }

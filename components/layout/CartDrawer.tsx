@@ -10,14 +10,13 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { cn } from "@/lib/cn";
 import { formatPrice } from "@/lib/money";
-import { linesFromCart } from "@/lib/order";
-import { buildOrderMessage, whatsAppUrl } from "@/lib/whatsapp";
 
 export function CartDrawer() {
   const {
     lines,
     buyerName,
     city,
+    phone,
     total,
     count,
     isCartOpen,
@@ -27,6 +26,11 @@ export function CartDrawer() {
     updateVariant,
     setDetails,
     catalog,
+    settings,
+    checkout,
+    checkingOut,
+    checkoutError,
+    lastOrderId,
   } = useBoutique();
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -81,9 +85,12 @@ export function CartDrawer() {
     };
   }, [isCartOpen, closeCart]);
 
-  const orderLines = linesFromCart(lines, catalog);
-  const checkoutHref =
-    orderLines.length > 0 ? whatsAppUrl(buildOrderMessage(orderLines, { buyerName, city })) : undefined;
+  function placeCartOrder() {
+    void checkout(
+      lines.map((line) => ({ productId: line.productId, size: line.size, color: line.color, quantity: line.quantity })),
+      { clearCart: true },
+    );
+  }
   const countLabel = count > 1 ? `${count} articles` : count === 1 ? "1 article" : "Aucun article";
 
   return (
@@ -129,10 +136,22 @@ export function CartDrawer() {
 
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col justify-center px-5 py-10">
-            <p className="font-display text-2xl text-ink">Le panier est encore vide.</p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
-              Choisissez une taille et une couleur, puis ajoutez la pièce. Vous pourrez tout envoyer en un message.
-            </p>
+            {lastOrderId ? (
+              <>
+                <p className="font-display text-2xl text-ink">Merci, votre commande est enregistrée.</p>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
+                  Numéro de commande : <strong className="text-cocoa">{lastOrderId}</strong>. Envoyez le message dans
+                  WhatsApp pour que nous la confirmions.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-display text-2xl text-ink">Le panier est encore vide.</p>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
+                  Choisissez une taille et une couleur, puis ajoutez la pièce. Vous pourrez tout envoyer en un message.
+                </p>
+              </>
+            )}
             <Button className="mt-6 self-start" onClick={closeCart} href="/collection">
               Voir la collection
             </Button>
@@ -241,6 +260,16 @@ export function CartDrawer() {
                   onChange={(event) => setDetails({ buyerName: event.target.value })}
                 />
                 <Input
+                  id="buyer-phone"
+                  label="Téléphone (facultatif)"
+                  value={phone}
+                  type="tel"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder="Pour confirmer la livraison"
+                  onChange={(event) => setDetails({ phone: event.target.value })}
+                />
+                <Input
                   id="buyer-city"
                   label="Ville ou quartier (facultatif)"
                   value={city}
@@ -253,16 +282,22 @@ export function CartDrawer() {
                 <p className="text-sm text-muted">Total</p>
                 <p className="font-display text-3xl text-ink">{formatPrice(total)}</p>
               </div>
-              {checkoutHref ? (
-                <Button
-                  href={checkoutHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 w-full"
-                  size="lg"
-                >
-                  Finaliser la commande sur WhatsApp
-                </Button>
+              {settings.deliveryNote ? <p className="mt-2 text-xs leading-relaxed text-muted">{settings.deliveryNote}</p> : null}
+              {checkoutError ? (
+                <p role="alert" className="mt-3 text-sm text-clay">
+                  {checkoutError}
+                </p>
+              ) : null}
+              <Button
+                onClick={placeCartOrder}
+                disabled={checkingOut || !settings.ordersOpen}
+                className="mt-4 w-full"
+                size="lg"
+              >
+                {checkingOut ? "Enregistrement…" : "Finaliser la commande sur WhatsApp"}
+              </Button>
+              {!settings.ordersOpen ? (
+                <p className="mt-3 text-center text-xs text-clay">Les commandes sont fermées pour le moment.</p>
               ) : null}
               <p className="mt-3 text-center text-xs leading-relaxed text-muted">
                 WhatsApp s&apos;ouvre avec le message déjà écrit. Il ne reste plus qu&apos;à l&apos;envoyer.

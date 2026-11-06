@@ -54,7 +54,7 @@ export function Header() {
     >
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-5">
         <Link href={routes.home} className="font-display text-[1.7rem] leading-none tracking-tight text-ink">
-          Zaveli
+          ZAVÉLYmarket
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm text-cocoa md:flex" aria-label="Pages">
@@ -173,7 +173,7 @@ export function HeaderFallback() {
     >
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-5">
         <Link href={routes.home} className="font-display text-[1.7rem] leading-none tracking-tight text-ink">
-          Zaveli
+          ZAVÉLYmarket
         </Link>
         <nav className="hidden items-center gap-7 text-sm text-cocoa md:flex" aria-label="Pages">
           {links.map((link) => (

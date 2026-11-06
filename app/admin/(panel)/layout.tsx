@@ -5,7 +5,9 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 import { logout } from "@/app/admin/actions";
+import { AdminNav } from "@/components/admin/AdminNav";
 import { readAdminSession } from "@/lib/admin-cookie";
+import { shop } from "@/lib/shop";
 
 export const instant = false;
 
@@ -24,11 +26,11 @@ async function AdminGate({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-line bg-paper/80">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 pt-4 pb-2">
           <div>
             <p className="text-xs tracking-[0.18em] text-clay uppercase">Administration</p>
             <Link href="/admin" className="font-display text-2xl text-ink">
-              Zaveli
+              {shop.name}
             </Link>
           </div>
           <div className="flex items-center gap-4 text-sm">
@@ -42,6 +44,7 @@ async function AdminGate({ children }: { children: ReactNode }) {
             </form>
           </div>
         </div>
+        <AdminNav />
       </header>
       <div className="mx-auto max-w-5xl px-5 py-10">{children}</div>
     </div>
