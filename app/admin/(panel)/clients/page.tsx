@@ -14,7 +14,7 @@ export default async function CustomersPage() {
 
   return (
     <section>
-      <h1 className="font-display text-4xl text-ink">Clientes</h1>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Clientes</h1>
       <p className="mt-2 text-sm text-muted">
         Regroupées d&apos;après le téléphone, ou le nom et la ville quand il n&apos;y a pas de numéro. Les commandes annulées ne comptent pas dans les achats.
       </p>

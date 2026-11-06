@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Nouvelle pièce" };
 export default function NewPiecePage() {
   return (
     <section className="max-w-2xl">
-      <h1 className="font-display text-4xl text-ink">Nouvelle pièce</h1>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Nouvelle pièce</h1>
       <p className="mt-2 text-sm text-muted">Elle rejoint la collection dès l&apos;enregistrement.</p>
       <div className="mt-8">
         <PieceForm action={savePiece} />

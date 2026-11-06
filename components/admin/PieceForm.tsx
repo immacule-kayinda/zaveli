@@ -118,7 +118,7 @@ export function PieceForm({
             />
             <button
               type="button"
-              className="px-2 text-sm text-muted hover:text-clay"
+              className="min-h-11 px-2 text-sm text-muted hover:text-clay"
               onClick={() => setColors((current) => current.filter((_, item) => item !== index))}
             >
               Retirer
@@ -127,7 +127,7 @@ export function PieceForm({
         ))}
         <button
           type="button"
-          className="justify-self-start text-sm text-clay underline-offset-4 hover:underline"
+          className="inline-flex min-h-11 items-center justify-self-start text-sm text-clay underline-offset-4 hover:underline"
           onClick={() => setColors((current) => [...current, { name: "", hex: "#C4B6A4" }])}
         >
           Ajouter une couleur
@@ -135,7 +135,7 @@ export function PieceForm({
       </fieldset>
 
       <Field label="Photo" id="image" hint={product ? "Laissez vide pour garder la photo actuelle." : "JPEG, PNG ou WebP, 5 Mo maximum."}>
-        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" className="text-sm text-cocoa" />
+        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" className="text-base text-cocoa" />
       </Field>
       <Input id="imageAlt" name="imageAlt" label="Description de la photo" defaultValue={product?.imageAlt} required maxLength={180} />
       <Field label="Cadrage" id="focal">
@@ -167,7 +167,7 @@ export function PieceForm({
 function Submit({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="justify-self-start">
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:justify-self-start">
       {pending ? "Enregistrement…" : label}
     </Button>
   );

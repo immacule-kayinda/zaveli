@@ -11,7 +11,7 @@ export default async function NewOrderPage() {
   const catalog = await getCatalog();
   return (
     <section className="max-w-3xl">
-      <h1 className="font-display text-4xl text-ink">Saisir une commande</h1>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Saisir une commande</h1>
       <p className="mt-2 text-sm text-muted">
         Pour une commande reçue par appel ou directement sur WhatsApp : elle rejoint le suivi et les statistiques.
       </p>

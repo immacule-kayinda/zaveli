@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { deleteOrder, saveOrderDetails, updateOrderStatus } from "@/app/admin/order-actions";
+import { MessageCircle, Phone } from "lucide-react";
+
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { OrderDetailsForm } from "@/components/admin/OrderDetailsForm";
 import { StatusBadge } from "@/components/admin/StatusBadge";
@@ -28,18 +30,32 @@ export default async function OrderPage({ params }: PageProps) {
   const contactHref = order.phone ? whatsAppUrl(customerMessage(order, shop.name), order.phone) : "";
 
   return (
-    <section className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+    <section className="grid gap-8 pb-20 md:pb-0 lg:grid-cols-[1.2fr_1fr]">
       <div>
-        <Link href="/admin/commandes" className="text-sm text-muted hover:text-clay">
+        <Link href="/admin/commandes" className="-mt-2 inline-flex min-h-11 items-center text-sm text-muted hover:text-clay">
           ← Toutes les commandes
         </Link>
         <div className="mt-3 flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-4xl text-ink">{order.id}</h1>
+          <h1 className="font-display text-3xl text-ink sm:text-4xl">{order.id}</h1>
           <StatusBadge status={order.status} />
         </div>
         <p className="mt-2 text-sm text-muted">
           Reçue le {formatDateTime(order.createdAt)} · {order.source === "site" ? "depuis le site" : "saisie à la main"}
         </p>
+
+        {order.buyerName || order.phone || order.city || order.address ? (
+          <div className="mt-4 rounded-[1.5rem] border border-line bg-paper p-4 text-sm text-cocoa">
+            {order.buyerName ? <p className="font-display text-xl text-ink">{order.buyerName}</p> : null}
+            {order.city || order.address ? (
+              <p className="mt-1 text-muted">{[order.city, order.address].filter(Boolean).join(" · ")}</p>
+            ) : null}
+            {order.phone ? (
+              <a href={`tel:+${order.phone}`} className="mt-2 inline-flex min-h-11 items-center gap-2 text-clay">
+                <Phone aria-hidden className="size-4" />+{order.phone}
+              </a>
+            ) : null}
+          </div>
+        ) : null}
 
         <ul className="mt-6 divide-y divide-line rounded-[1.5rem] border border-line bg-paper">
           {order.lines.map((line) => (
@@ -100,7 +116,7 @@ export default async function OrderPage({ params }: PageProps) {
               id="status"
               name="status"
               defaultValue={order.status}
-              className="h-11 w-full rounded-full border border-line bg-paper px-4 text-sm text-ink outline-none focus:border-clay"
+              className="h-12 w-full min-w-0 rounded-full border border-line bg-paper px-4 text-base text-ink outline-none focus:border-clay"
             >
               {statuses.map((status) => (
                 <option key={status} value={status}>
@@ -130,6 +146,34 @@ export default async function OrderPage({ params }: PageProps) {
 
         <ConfirmDelete action={deleteOrder} id={order.id} message={`Supprimer définitivement la commande ${order.id} ?`} label="Supprimer la commande" />
       </aside>
+
+      {next || contactHref ? (
+        <div className="fixed inset-x-0 bottom-[calc(3.5rem+env(safe-area-inset-bottom))] z-20 flex gap-2 border-t border-line bg-paper/95 px-4 py-2.5 backdrop-blur md:hidden">
+          {next ? (
+            <form action={updateOrderStatus} className="min-w-0 flex-1">
+              <input type="hidden" name="id" value={order.id} />
+              <input type="hidden" name="status" value={next} />
+              <Button type="submit" className="w-full">
+                Passer à « {statusLabels[next]} »
+              </Button>
+            </form>
+          ) : (
+            <p className="flex min-h-11 flex-1 items-center text-sm text-muted">Commande {statusLabels[order.status].toLocaleLowerCase("fr")}.</p>
+          )}
+          {contactHref ? (
+            <Button
+              href={contactHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="secondary"
+              aria-label="Prévenir la cliente sur WhatsApp"
+              className="shrink-0 px-4"
+            >
+              <MessageCircle aria-hidden className="size-5" />
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </section>
   );
 }

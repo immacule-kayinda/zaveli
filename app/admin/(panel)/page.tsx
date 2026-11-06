@@ -27,9 +27,9 @@ export default async function DashboardPage() {
 
   return (
     <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between [&>a]:w-full sm:[&>a]:w-auto">
         <div>
-          <h1 className="font-display text-4xl text-ink">Tableau de bord</h1>
+          <h1 className="font-display text-3xl text-ink sm:text-4xl">Tableau de bord</h1>
           <p className="mt-2 text-sm text-muted">
             {stats.orderCount > 1 ? `${stats.orderCount} commandes` : `${stats.orderCount} commande`} au total ·{" "}
             {formatPrice(stats.revenue)} de ventes, annulations exclues.
@@ -38,30 +38,30 @@ export default async function DashboardPage() {
         <Button href="/admin/commandes/nouvelle">Saisir une commande</Button>
       </div>
 
-      <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {tiles.map((tile) => {
           const body = (
             <>
               <p className="text-xs tracking-[0.14em] text-muted uppercase">{tile.label}</p>
-              <p className={`font-display mt-2 text-4xl ${tile.strong ? "text-clay" : "text-ink"}`}>{tile.value}</p>
+              <p className={`font-display mt-2 text-3xl sm:text-4xl ${tile.strong ? "text-clay" : "text-ink"}`}>{tile.value}</p>
               <p className="mt-1 text-xs text-muted">{tile.hint}</p>
             </>
           );
           return (
             <li key={tile.label}>
               {tile.href ? (
-                <Link href={tile.href} className="block h-full rounded-[1.5rem] border border-line bg-paper p-5 hover:border-clay">
+                <Link href={tile.href} className="block h-full rounded-[1.5rem] border border-line bg-paper p-4 hover:border-clay sm:p-5">
                   {body}
                 </Link>
               ) : (
-                <div className="h-full rounded-[1.5rem] border border-line bg-paper p-5">{body}</div>
+                <div className="h-full rounded-[1.5rem] border border-line bg-paper p-4 sm:p-5">{body}</div>
               )}
             </li>
           );
         })}
       </ul>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="rounded-[1.5rem] border border-line bg-paper p-5">
           <h2 className="font-display text-2xl text-ink">Commandes des 14 derniers jours</h2>
           <ol className="mt-5 flex h-40 items-end gap-1.5" aria-label="Commandes par jour">
@@ -97,11 +97,11 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-2">
         <div className="rounded-[1.5rem] border border-line bg-paper p-5">
           <div className="flex items-baseline justify-between">
             <h2 className="font-display text-2xl text-ink">Dernières commandes</h2>
-            <Link href="/admin/commandes" className="text-sm text-clay underline-offset-4 hover:underline">
+            <Link href="/admin/commandes" className="inline-flex min-h-11 items-center text-sm text-clay underline-offset-4 hover:underline">
               Tout voir
             </Link>
           </div>
@@ -127,7 +127,7 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        <div className="grid content-start gap-6">
+        <div className="grid min-w-0 content-start gap-6">
           <div className="rounded-[1.5rem] border border-line bg-paper p-5">
             <h2 className="font-display text-2xl text-ink">Pièces les plus commandées</h2>
             {stats.topProducts.length === 0 ? (
@@ -154,7 +154,7 @@ export default async function DashboardPage() {
               {catalog.length} pièces en ligne
               {soldOut.length > 0 ? `, dont ${soldOut.length} épuisée${soldOut.length > 1 ? "s" : ""}` : ""}.
             </p>
-            <Link href="/admin/collection" className="mt-3 inline-block text-sm text-clay underline-offset-4 hover:underline">
+            <Link href="/admin/collection" className="mt-1 inline-flex min-h-11 items-center text-sm text-clay underline-offset-4 hover:underline">
               Gérer la collection
             </Link>
           </div>

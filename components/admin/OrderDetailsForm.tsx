@@ -27,7 +27,7 @@ export function OrderDetailsForm({
         </p>
       ) : null}
       <Input id="buyerName" name="buyerName" label="Prénom ou nom" defaultValue={order.buyerName} maxLength={60} />
-      <Input id="phone" name="phone" label="Téléphone" type="tel" defaultValue={order.phone} hint="Avec l'indicatif, ou en 08… pour la RDC." />
+      <Input id="phone" name="phone" label="Téléphone" type="tel" inputMode="tel" defaultValue={order.phone} hint="Avec l'indicatif, ou en 08… pour la RDC." />
       <Input id="city" name="city" label="Ville ou quartier" defaultValue={order.city} maxLength={80} />
       <Input id="address" name="address" label="Adresse de livraison" defaultValue={order.address} maxLength={200} />
       <div className="grid gap-1.5">
@@ -52,7 +52,7 @@ export function OrderDetailsForm({
 function Save() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="justify-self-start">
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:justify-self-start">
       {pending ? "Enregistrement…" : "Enregistrer"}
     </Button>
   );

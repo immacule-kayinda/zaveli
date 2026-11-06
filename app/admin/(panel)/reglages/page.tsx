@@ -13,7 +13,7 @@ export default async function SettingsPage({ searchParams }: PageProps) {
   const [settings, params] = await Promise.all([getSettings(), searchParams]);
   return (
     <section className="max-w-2xl">
-      <h1 className="font-display text-4xl text-ink">Réglages</h1>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">Réglages</h1>
       <p className="mt-2 text-sm text-muted">Ce qui change sur la boutique sans toucher au code.</p>
       <div className="mt-8">
         <SettingsForm action={saveSettings} settings={settings} saved={Boolean(params.enregistre)} />
