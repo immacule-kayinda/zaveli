@@ -14,7 +14,7 @@ export async function Hero() {
     <section className="relative">
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:py-20 lg:pb-28">
         <div>
-          <p className="text-xs tracking-[0.22em] text-clay uppercase">Maison Zaveli · Kinshasa</p>
+          <p className="text-xs tracking-[0.22em] text-clay uppercase">ZAVÉLYmarket · Kinshasa</p>
           <h1 className="font-display mt-4 max-w-xl text-[2.7rem] leading-[1.02] text-ink sm:text-6xl">
             Des pièces douces,
             <span className="mt-1 block italic">pour les jours ordinaires.</span>

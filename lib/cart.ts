@@ -14,12 +14,14 @@ export type CartState = {
   lines: CartLine[];
   buyerName: string;
   city: string;
+  phone: string;
 };
 
 export const emptyCart: CartState = {
   lines: [],
   buyerName: "",
   city: "",
+  phone: "",
 };
 
 export function cartLineId(productId: string, size: string, color: string): string {
@@ -32,7 +34,8 @@ export type CartAction =
   | { type: "setQuantity"; lineId: string; quantity: number }
   | { type: "remove"; lineId: string }
   | { type: "updateVariant"; lineId: string; size: string; color: string }
-  | { type: "setDetails"; buyerName?: string; city?: string };
+  | { type: "setDetails"; buyerName?: string; city?: string; phone?: string }
+  | { type: "clear" };
 
 function clampQuantity(quantity: number): number {
   return Math.min(MAX_QUANTITY, Math.max(1, Math.trunc(quantity)));
@@ -112,7 +115,10 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         ...state,
         buyerName: action.buyerName ?? state.buyerName,
         city: action.city ?? state.city,
+        phone: action.phone ?? state.phone,
       };
+    case "clear":
+      return { ...state, lines: [] };
     default:
       return state;
   }
@@ -159,6 +165,7 @@ export function sanitizeCart(raw: unknown, catalog: Product[]): CartState {
     lines,
     buyerName: clip(raw.buyerName),
     city: clip(raw.city),
+    phone: clip(raw.phone),
   };
 }
 

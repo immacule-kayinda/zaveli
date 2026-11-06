@@ -10,7 +10,7 @@ function readWhatsAppNumber(): string {
 }
 
 export const shop = {
-  name: "Zaveli",
+  name: "ZAVÉLYmarket",
   city: "Kinshasa",
   whatsappNumber: readWhatsAppNumber(),
 } as const;

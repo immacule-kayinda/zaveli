@@ -21,6 +21,11 @@ export function ProductCard({ product }: { product: Product }) {
           sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
           className={cn("object-cover transition duration-700 ease-out group-hover:scale-[1.03]", product.focal)}
         />
+        {product.soldOut ? (
+          <span className="absolute top-3 right-3 rounded-full bg-cocoa/90 px-3 py-1 text-xs tracking-wide text-paper">
+            Épuisée
+          </span>
+        ) : null}
         {product.isNew ? (
           <span className="absolute top-3 left-3 rounded-full bg-paper/95 px-3 py-1 text-xs tracking-wide text-cocoa">
             Nouveau

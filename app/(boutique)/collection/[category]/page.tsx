@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const label = categoryLabels[category];
   return {
     title: label,
-    description: `${label} Zaveli. Taille, couleur, puis commande sur WhatsApp.`,
+    description: `${label} ZAVÉLYmarket. Taille, couleur, puis commande sur WhatsApp.`,
   };
 }
 

@@ -74,6 +74,7 @@ export type PieceDraft = {
   imageAlt: string;
   focal: string;
   isNew: boolean;
+  soldOut?: boolean;
 };
 
 export function toProduct(draft: PieceDraft): { ok: true; product: Product } | { ok: false; error: string } {
@@ -140,6 +141,7 @@ export function toProduct(draft: PieceDraft): { ok: true; product: Product } | {
       imageAlt,
       focal: draft.focal as FocalChoice,
       isNew: draft.isNew,
+      ...(draft.soldOut ? { soldOut: true } : {}),
     },
   };
 }
@@ -166,6 +168,7 @@ export function parseCatalog(value: unknown): Product[] | null {
       imageAlt: typeof entry.imageAlt === "string" ? entry.imageAlt : "",
       focal: typeof entry.focal === "string" ? entry.focal : "",
       isNew: entry.isNew === true,
+      soldOut: entry.soldOut === true,
     };
     const parsed = toProduct(draft);
     if (!parsed.ok || parsed.product.id !== draft.id) return null;

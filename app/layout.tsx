@@ -19,8 +19,8 @@ const sans = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "Zaveli — Vêtements et accessoires",
-    template: "%s — Zaveli",
+    default: "ZAVÉLYmarket — Vêtements et accessoires",
+    template: "%s — ZAVÉLYmarket",
   },
   description:
     "Maison de vêtements et d'accessoires pour femmes, à Kinshasa. Choisissez la taille et la couleur, puis commandez directement sur WhatsApp.",

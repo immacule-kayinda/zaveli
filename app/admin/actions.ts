@@ -65,19 +65,19 @@ export async function savePiece(_state: FormState, formData: FormData): Promise<
 
   await saveCatalog(next);
   if (image !== currentImage && currentImage) await discardImage(currentImage);
-  redirect(editing ? `/admin/pieces/${parsed.product.id}` : "/admin");
+  redirect(editing ? `/admin/pieces/${parsed.product.id}` : "/admin/collection");
 }
 
 export async function deletePiece(formData: FormData): Promise<void> {
   if (!(await readAdminSession())) redirect("/admin/connexion");
   const id = String(formData.get("id") ?? "");
   const catalog = await catalogForWrite();
-  if (!catalog) redirect(id ? `/admin/pieces/${id}` : "/admin");
+  if (!catalog) redirect(id ? `/admin/pieces/${id}` : "/admin/collection");
   const current = catalog.find((product) => product.id === id);
-  if (!current) redirect("/admin");
+  if (!current) redirect("/admin/collection");
   await saveCatalog(catalog.filter((product) => product.id !== id));
   await discardImage(current.image);
-  redirect("/admin");
+  redirect("/admin/collection");
 }
 
 async function catalogForWrite(): Promise<Product[] | null> {
@@ -113,5 +113,6 @@ function draftFromForm(formData: FormData, image: string): PieceDraft {
     imageAlt: String(formData.get("imageAlt") ?? ""),
     focal: String(formData.get("focal") ?? ""),
     isNew: formData.get("isNew") === "on",
+    soldOut: formData.get("soldOut") === "on",
   };
 }

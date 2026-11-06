@@ -7,7 +7,7 @@ import { selectProducts } from "@/lib/products";
 export const metadata: Metadata = {
   title: "Collection",
   description:
-    "Robes, pulls, accessoires et chaussures Zaveli. Choisissez la taille et la couleur, puis commandez sur WhatsApp.",
+    "Robes, pulls, accessoires et chaussures ZAVÉLYmarket. Choisissez la taille et la couleur, puis commandez sur WhatsApp.",
 };
 
 export default async function CollectionPage() {

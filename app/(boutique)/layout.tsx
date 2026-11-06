@@ -7,26 +7,27 @@ import { CartDrawer } from "@/components/layout/CartDrawer";
 import { Footer } from "@/components/layout/Footer";
 import { Header, HeaderFallback } from "@/components/layout/Header";
 import { getCatalog } from "@/lib/catalog";
+import { getSettings } from "@/lib/settings";
 
 export const instant = false;
 
 export default async function BoutiqueLayout({ children }: { children: ReactNode }) {
-  const catalog = await getCatalog();
+  const [catalog, settings] = await Promise.all([getCatalog(), getSettings()]);
 
   return (
     <>
       <a href="#contenu" className="skip-link">
         Aller au contenu
       </a>
-      <AnnouncementBar />
-      <BoutiqueProvider catalog={catalog}>
+      <AnnouncementBar text={settings.announcement} />
+      <BoutiqueProvider catalog={catalog} settings={settings}>
         <Suspense fallback={<HeaderFallback />}>
           <Header />
         </Suspense>
         <main id="contenu" className="pt-[calc(var(--banner-h)+var(--header-h))]">
           {children}
         </main>
-        <Footer />
+        <Footer whatsappNumber={settings.whatsappNumber} />
         <CartDrawer />
       </BoutiqueProvider>
     </>
