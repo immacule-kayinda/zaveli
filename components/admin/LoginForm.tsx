@@ -1,6 +1,7 @@
 "use client";
 
-import { useActionState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { login, type FormState } from "@/app/admin/actions";
@@ -19,9 +20,35 @@ export function LoginForm() {
         </p>
       ) : null}
       <Input id="user" name="user" label="Identifiant" autoComplete="username" required />
-      <Input id="password" name="password" label="Mot de passe" type="password" autoComplete="current-password" required />
+      <PasswordField />
       <Submit />
     </form>
+  );
+}
+
+function PasswordField() {
+  const [visible, setVisible] = useState(false);
+  return (
+    <div className="relative">
+      <Input
+        id="password"
+        name="password"
+        label="Mot de passe"
+        type={visible ? "text" : "password"}
+        autoComplete="current-password"
+        className="pr-12"
+        required
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((value) => !value)}
+        aria-label={visible ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+        aria-pressed={visible}
+        className="absolute right-3 bottom-3 grid size-6 place-items-center rounded-full text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-clay"
+      >
+        {visible ? <EyeOff aria-hidden className="size-5" /> : <Eye aria-hidden className="size-5" />}
+      </button>
+    </div>
   );
 }
 
