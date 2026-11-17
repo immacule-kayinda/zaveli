@@ -14,9 +14,9 @@ export default async function AdminHomePage() {
 
   return (
     <section>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between [&>a]:w-full sm:[&>a]:w-auto">
         <div>
-          <h1 className="font-display text-4xl text-ink">La collection</h1>
+          <h1 className="font-display text-3xl text-ink sm:text-4xl">La collection</h1>
           <p className="mt-2 text-sm text-muted">
             {catalog.length > 1 ? `${catalog.length} pièces` : `${catalog.length} pièce`}. Les changements sont visibles
             tout de suite sur la boutique.

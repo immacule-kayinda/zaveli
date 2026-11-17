@@ -62,8 +62,8 @@ export function ManualOrderForm({
         {rows.map((row, index) => {
           const product = catalog.find((item) => item.id === row.productId);
           return (
-            <div key={row.key} className="grid gap-2 rounded-[1.5rem] border border-line bg-paper p-4 sm:grid-cols-[2fr_1fr_1.2fr_5rem_auto] sm:items-end">
-              <div className="grid gap-1.5">
+            <div key={row.key} className="grid grid-cols-2 gap-3 rounded-[1.5rem] border border-line bg-paper p-4 sm:grid-cols-[2fr_1fr_1.2fr_5rem_auto] sm:items-end">
+              <div className="col-span-2 grid gap-1.5 sm:col-span-1">
                 <label htmlFor={`product-${row.key}`} className="text-xs text-muted">Pièce</label>
                 <select
                   id={`product-${row.key}`}
@@ -119,7 +119,7 @@ export function ManualOrderForm({
                 disabled={rows.length === 1}
                 aria-label={`Retirer l'article ${index + 1}`}
                 onClick={() => setRows((current) => current.filter((item) => item.key !== row.key))}
-                className="h-12 px-2 text-sm text-muted hover:text-clay disabled:opacity-30"
+                className="min-h-12 self-end px-2 text-sm text-muted hover:text-clay disabled:opacity-30"
               >
                 Retirer
               </button>
@@ -129,7 +129,7 @@ export function ManualOrderForm({
         <div className="flex items-center justify-between">
           <button
             type="button"
-            className="text-sm text-clay underline-offset-4 hover:underline"
+            className="inline-flex min-h-11 items-center text-sm text-clay underline-offset-4 hover:underline"
             onClick={() => {
               setRows((current) => [...current, blankRow(nextKey, available)]);
               setNextKey((value) => value + 1);
@@ -146,7 +146,7 @@ export function ManualOrderForm({
       <fieldset className="grid gap-4 sm:grid-cols-2">
         <legend className="font-display mb-3 text-2xl text-ink">Cliente</legend>
         <Input id="buyerName" name="buyerName" label="Prénom ou nom" maxLength={60} />
-        <Input id="phone" name="phone" label="Téléphone" type="tel" hint="Avec l'indicatif, ou en 08… pour la RDC." />
+        <Input id="phone" name="phone" label="Téléphone" type="tel" inputMode="tel" autoComplete="off" hint="Avec l'indicatif, ou en 08… pour la RDC." />
         <Input id="city" name="city" label="Ville ou quartier" maxLength={80} />
         <Input id="address" name="address" label="Adresse de livraison" maxLength={200} />
       </fieldset>
@@ -178,7 +178,7 @@ function blankRow(key: number, products: Product[]): Row {
 function Save() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="justify-self-start">
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:justify-self-start">
       {pending ? "Enregistrement…" : "Enregistrer la commande"}
     </Button>
   );

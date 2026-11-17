@@ -1,3 +1,4 @@
+import { LogOut, Store } from "lucide-react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { connection } from "next/server";
@@ -26,27 +27,37 @@ async function AdminGate({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-line bg-paper/80">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 pt-4 pb-2">
-          <div>
-            <p className="text-xs tracking-[0.18em] text-clay uppercase">Administration</p>
-            <Link href="/admin" className="font-display text-2xl text-ink">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 pt-3 pb-3 sm:px-5 md:pb-2">
+          <div className="min-w-0">
+            <p className="text-[0.65rem] tracking-[0.18em] text-clay uppercase sm:text-xs">Administration</p>
+            <Link href="/admin" className="font-display block truncate text-2xl leading-tight text-ink">
               {shop.name}
             </Link>
           </div>
-          <div className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-cocoa hover:text-clay">
-              Voir la boutique
+          <div className="flex shrink-0 items-center gap-1 text-sm">
+            <Link
+              href="/"
+              aria-label="Voir la boutique"
+              className="grid size-11 place-items-center rounded-full text-cocoa hover:bg-sand/60 hover:text-clay md:inline-flex md:size-auto md:px-3 md:py-2"
+            >
+              <Store aria-hidden className="size-5 md:hidden" />
+              <span className="hidden md:inline">Voir la boutique</span>
             </Link>
             <form action={logout}>
-              <button type="submit" className="text-muted hover:text-clay">
-                Se déconnecter
+              <button
+                type="submit"
+                aria-label="Se déconnecter"
+                className="grid size-11 place-items-center rounded-full text-muted hover:bg-sand/60 hover:text-clay md:inline-flex md:size-auto md:px-3 md:py-2"
+              >
+                <LogOut aria-hidden className="size-5 md:hidden" />
+                <span className="hidden md:inline">Se déconnecter</span>
               </button>
             </form>
           </div>
         </div>
         <AdminNav />
       </header>
-      <div className="mx-auto max-w-5xl px-5 py-10">{children}</div>
+      <div className="mx-auto max-w-5xl px-4 pt-6 pb-28 sm:px-5 md:py-10">{children}</div>
     </div>
   );
 }

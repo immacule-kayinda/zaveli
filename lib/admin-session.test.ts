@@ -34,6 +34,17 @@ describe("credentialsMatch", () => {
     assert.equal(credentialsMatch("zaveli", "autre"), false);
     assert.equal(credentialsMatch("autre", "mot-de-passe"), false);
   });
+
+  it("tolère la casse et les espaces de l'identifiant, et les espaces autour du mot de passe", () => {
+    process.env.ADMIN_USER = "boutique.test";
+    process.env.ADMIN_PASSWORD = "Exemple-Fictif-42";
+    process.env.ADMIN_SESSION_SECRET = "secret-de-session";
+    assert.equal(credentialsMatch("Boutique.Test ", "Exemple-Fictif-42"), true);
+    assert.equal(credentialsMatch(" boutique.test", "Exemple-Fictif-42 "), true);
+    assert.equal(credentialsMatch("boutique.test", "exemple-fictif-42"), false, "le mot de passe garde sa casse");
+    assert.equal(credentialsMatch("boutique.test", ""), false);
+    assert.equal(credentialsMatch("", ""), false);
+  });
 });
 
 describe("session token", () => {

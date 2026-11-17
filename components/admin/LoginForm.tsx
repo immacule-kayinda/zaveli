@@ -4,11 +4,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { login, type FormState } from "@/app/admin/actions";
+import { login, type LoginState } from "@/app/admin/actions";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
-const initial: FormState = { error: "" };
+const initial: LoginState = { error: "", user: "" };
 
 export function LoginForm() {
   const [state, formAction] = useActionState(login, initial);
@@ -19,7 +19,18 @@ export function LoginForm() {
           {state.error}
         </p>
       ) : null}
-      <Input id="user" name="user" label="Identifiant" autoComplete="username" required />
+      <Input
+        id="user"
+        name="user"
+        label="Identifiant"
+        autoComplete="username"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
+        defaultValue={state.user}
+        key={state.user}
+        required
+      />
       <PasswordField />
       <Submit />
     </form>
@@ -36,6 +47,9 @@ function PasswordField() {
         label="Mot de passe"
         type={visible ? "text" : "password"}
         autoComplete="current-password"
+        autoCapitalize="none"
+        autoCorrect="off"
+        spellCheck={false}
         className="pr-12"
         required
       />

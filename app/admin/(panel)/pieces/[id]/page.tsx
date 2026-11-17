@@ -18,7 +18,7 @@ export default async function EditPiecePage({ params }: PageProps) {
 
   return (
     <section className="max-w-2xl">
-      <h1 className="font-display text-4xl text-ink">{product.name}</h1>
+      <h1 className="font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
       <p className="mt-2 text-sm text-muted">Modifiez la fiche, ou retirez la pièce de la collection.</p>
       <div className="mt-8">
         <PieceForm action={savePiece} product={product} />

@@ -38,12 +38,12 @@ export default async function OrdersPage({ searchParams }: PageProps) {
     <section>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="font-display text-4xl text-ink">Commandes</h1>
+          <h1 className="font-display text-3xl text-ink sm:text-4xl">Commandes</h1>
           <p className="mt-2 text-sm text-muted">
             {orders.length} sur {all.length}. Chaque commande validée sur le site est enregistrée ici avant l&apos;ouverture de WhatsApp.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex">
           <Button href="/admin/export/commandes" variant="outline" download>
             Exporter (CSV)
           </Button>
@@ -58,15 +58,15 @@ export default async function OrdersPage({ searchParams }: PageProps) {
           name="q"
           defaultValue={query}
           aria-label="Rechercher une commande"
-          placeholder="Numéro, nom, ville, téléphone, pièce…"
-          className="h-11 w-full rounded-full border border-line bg-paper px-5 text-sm text-ink outline-none focus:border-clay"
+          placeholder="Nom, numéro, téléphone…"
+          className="h-12 w-full min-w-0 rounded-full border border-line bg-paper px-5 text-base text-ink outline-none focus:border-clay"
         />
-        <Button type="submit" variant="secondary">
+        <Button type="submit" variant="secondary" className="shrink-0">
           Chercher
         </Button>
       </form>
 
-      <nav aria-label="Filtrer par statut" className="mt-4 flex flex-wrap gap-2">
+      <nav aria-label="Filtrer par statut" className="-mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
         {[{ value: "", label: "Toutes" }, ...statuses.map((value) => ({ value, label: statusLabels[value] }))].map((item) => {
           const count = item.value ? all.filter((order) => order.status === item.value).length : all.length;
           const active = item.value === activeStatus;
@@ -76,7 +76,7 @@ export default async function OrdersPage({ searchParams }: PageProps) {
               href={href(item.value)}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "rounded-full border px-3.5 py-1.5 text-sm transition",
+                "inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-full border px-4 text-sm whitespace-nowrap transition",
                 active ? "border-cocoa bg-cocoa text-paper" : "border-line bg-paper text-cocoa hover:border-clay",
               )}
             >

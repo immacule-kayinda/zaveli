@@ -72,7 +72,7 @@ export function SettingsForm({
 function Save() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" disabled={pending} className="justify-self-start">
+    <Button type="submit" disabled={pending} className="w-full sm:w-auto sm:justify-self-start">
       {pending ? "Enregistrement…" : "Enregistrer"}
     </Button>
   );
